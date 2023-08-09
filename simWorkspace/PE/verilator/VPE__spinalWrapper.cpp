@@ -159,7 +159,7 @@ public:
     uint32_t timeCheck;
     bool waveEnabled;
     VPE top;
-    ISignalAccess *signalAccess[9];
+    ISignalAccess *signalAccess[12];
     #ifdef TRACE
 	  VerilatedVcdC tfp;
 	  #endif
@@ -172,15 +172,18 @@ public:
       timeCheck = 0;
       lastFlushAt = high_resolution_clock::now();
       waveEnabled = true;
-      signalAccess[0] = new CDataSignalAccess( top.io_din_valid );
-      signalAccess[1] = new CDataSignalAccess( top.io_din_payload_data );
-      signalAccess[2] = new CDataSignalAccess( top.io_din_payload_weight );
-      signalAccess[3] = new CDataSignalAccess( top.io_dout_valid );
+      signalAccess[0] = new CDataSignalAccess( top.io_din_payload_data );
+      signalAccess[1] = new CDataSignalAccess( top.io_din_payload_weight );
+      signalAccess[2] = new CDataSignalAccess( top.io_din_ctrl_valid );
+      signalAccess[3] = new CDataSignalAccess( top.io_din_ctrl_lastOrFlush );
       signalAccess[4] = new CDataSignalAccess( top.io_dout_payload_data );
       signalAccess[5] = new CDataSignalAccess( top.io_dout_payload_weight );
-      signalAccess[6] = new SDataSignalAccess( top.io_mulres );
-      signalAccess[7] = new CDataSignalAccess( top.clk );
-      signalAccess[8] = new CDataSignalAccess( top.resetn );
+      signalAccess[6] = new CDataSignalAccess( top.io_dout_ctrl_valid );
+      signalAccess[7] = new CDataSignalAccess( top.io_dout_ctrl_lastOrFlush );
+      signalAccess[8] = new CDataSignalAccess( top.io_mulres_valid );
+      signalAccess[9] = new SDataSignalAccess( top.io_mulres_payload );
+      signalAccess[10] = new CDataSignalAccess( top.clk );
+      signalAccess[11] = new CDataSignalAccess( top.resetn );
 
       #ifdef TRACE
       Verilated::traceEverOn(true);
@@ -192,7 +195,7 @@ public:
     }
 
     virtual ~Wrapper_1(){
-      for(int idx = 0;idx < 9;idx++){
+      for(int idx = 0;idx < 12;idx++){
           delete signalAccess[idx];
       }
 

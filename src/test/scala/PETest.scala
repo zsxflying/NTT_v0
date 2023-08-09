@@ -8,7 +8,8 @@ object PETest extends App{
     dut
   }.doSim{ dut =>
     dut.clockDomain.forkStimulus(10)
-    dut.io.din.valid #= false
+    dut.io.din.ctrl.valid #= false
+    dut.io.din.ctrl.lastOrFlush #= true
     dut.clockDomain.waitSampling(2)
     insert(127,127)
     insert(127,127)
@@ -19,15 +20,16 @@ object PETest extends App{
     insert(-128,127)
     for(i<-0 until 10){
       dut.clockDomain.waitSampling()
-      println(dut.io.mulres.toBigInt)
+      println(dut.io.mulres.payload.toBigInt)
     }
 
     def insert(data:Int, weight:Int)={
-      dut.io.din.valid #= true
+      dut.io.din.ctrl.valid #= true
+      dut.io.din.ctrl.lastOrFlush #= false
       dut.io.din.payload.data #= data
       dut.io.din.payload.weight #= weight
       dut.clockDomain.waitSampling()
-      println(dut.io.mulres.toBigInt)
+      println(dut.io.mulres.payload.toBigInt)
     }
 
   }

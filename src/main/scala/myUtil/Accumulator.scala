@@ -14,10 +14,11 @@ object Accumulator{
     }
   }
 
-  def apply(data: SInt, valid: Bool, flush: Bool) = {
+  def apply(data: SInt, valid: Bool, lastOrFlush: Bool) = {
     new Area {
+      val lastOrFlushReg = RegNext(lastOrFlush)
       val value = Reg(data)
-      when(flush){
+      when(lastOrFlushReg){
         value := data
       }.elsewhen(valid){
         value := data + value
