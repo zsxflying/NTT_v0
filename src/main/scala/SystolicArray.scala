@@ -19,7 +19,7 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   // 生成PE阵列
   val peArray = Array.fill(arraySize)(Array.fill(arraySize)(new PE()))
 
-  val resTemp = Array.fill(arraySize)(Array.fill(arraySize)(SInt(resWidth bits))) // TODO: 查看是否会有in out属性
+  val resTemp = Array.fill(arraySize)(Array.fill(arraySize)(SInt(resWidth bits)))
   val resData = Array.fill(arraySize)(SInt(resWidth bits))
   val resLast = peArray.last.last.io.mulres.valid
   val resValid = {
@@ -57,7 +57,7 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
       }
 
       if (j == 0) {
-        peArray(i)(j).io.din.payload.data := { // TODO: last信号的delay会不会冗余
+        peArray(i)(j).io.din.payload.data := {
           if (config.SKEW_INPUT) {
             Delay(io.dataIn.payload(i), i + config.DATA_WEIGHT_INPUT_DELAY.toInt, when = needDelay)
           } else {
