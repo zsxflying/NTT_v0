@@ -5,7 +5,7 @@ class SRAMReadOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int, initData:
   // 同步读
   val io = new Bundle{
     val addr = in UInt(log2Up(depth) bits)
-    val rdata = out Bits(singleDataWidth * dataNumPerLine bits)
+    val rdata = out(SRAMData(singleDataWidth, dataNumPerLine))
   }
 
   // 初始化为0，可后门读写
@@ -19,7 +19,7 @@ class SRAMReadOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int, initData:
   io.rdata := mem.readSync(
     enable = True,
     address = io.addr
-  ).asBits
+  )
 
 }
 

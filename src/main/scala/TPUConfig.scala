@@ -1,16 +1,19 @@
 class TPUConfig() {
   // size config
-  val DATA_WIDTH = 8 //
+  val DATA_WIDTH = 3
   val WEIGHT_WIDTH = DATA_WIDTH
-  val ARRAY_SIZE = 4
+  val ARRAY_SIZE = 2
 
   val RESULT_WIDTH = DATA_WIDTH + WEIGHT_WIDTH // PE单元乘法结果的宽度
 
   // functional config
-  private var MULTIPLY_CYCLE = 0 // 默认为异步乘法
-  private var SKEW_INPUT = 1 // 默认开启输入倾斜
-  private var SKEW_OUTPUT = 1 // 默认开启输出倾斜
-  private var PE_OUTPUT_REG = 0 // 默认
+  var MULTIPLY_CYCLE = 0 // 默认为异步乘法
+  var SKEW_INPUT = true // 默认开启输入倾斜
+  var SKEW_OUTPUT = true // 默认开启输出倾斜
+  var DATA_WEIGHT_INPUT_DELAY = true // 默认输入增加一级delay
+  var RES_OUTPUT_DELAY = true // 默认输出增加一级delay
+
+  var debug_noNegative = true
 
   /**
    * 设置乘法器的运算周期
@@ -24,21 +27,28 @@ class TPUConfig() {
    * 取消输入倾斜模块
    */
   def noSkewInput = {
-    SKEW_INPUT = 0
+    SKEW_INPUT = false
   }
 
   /**
    * 取消输出倾斜模块
    */
   def noSkewOutput = {
-    SKEW_OUTPUT = 0
+    SKEW_OUTPUT = false
   }
 
   /**
-   * 添加PE输出寄存器
+   * 取消data、weight倾斜阵列的一级delay
    */
-  def hasPEOutputReg={
-    PE_OUTPUT_REG = 1
+  def noDataWeightInputDelay={
+    DATA_WEIGHT_INPUT_DELAY = false
+  }
+
+  /**
+   * 取消result倾斜阵列的一级delay
+   */
+  def noResOutputDelay = {
+    RES_OUTPUT_DELAY = false
   }
 }
 

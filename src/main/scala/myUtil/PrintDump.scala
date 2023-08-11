@@ -5,7 +5,7 @@ object PrintDump{
   /**
    * 打印二维矩阵到标准输出
    * @param mat
-   * @param str
+   * @param str mat名字
    * @param sep 分隔符
    * @tparam T
    */

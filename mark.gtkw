@@ -1,0 +1,82 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Fri Aug 11 03:54:50 2023
+[*]
+[dumpfile] "/home/rick/NTTAccelerator/NTT_v0/simWorkspace/SysTop/test.vcd"
+[dumpfile_mtime] "Fri Aug 11 03:54:42 2023"
+[dumpfile_size] 17418
+[savefile] "/home/rick/NTTAccelerator/NTT_v0/mark.gtkw"
+[timestart] 86
+[size] 3288 2002
+[pos] -1 -1
+*-4.613933 245 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.SysTop.
+[treeopen] TOP.SysTop.systolic.
+[sst_width] 755
+[signals_width] 686
+[sst_expanded] 1
+[sst_vpaned_height] 607
+@800200
+-top
+@24
+TOP.SysTop.clk
+@28
+TOP.SysTop.resetn
+@24
+TOP.SysTop.io_start
+TOP.SysTop.io_done
+TOP.SysTop.dataRam_io_addr[1:0]
+TOP.SysTop.dataRam_io_rdata_data_0[2:0]
+TOP.SysTop.dataRam_io_rdata_data_1[2:0]
+TOP.SysTop.weightRam_io_rdata_data_0[2:0]
+TOP.SysTop.weightRam_io_rdata_data_1[2:0]
+TOP.SysTop.fsm_stateReg[1:0]
+TOP.SysTop.systolic_io_resOut_valid
+TOP.SysTop.systolic_io_resOut_payload_last
+@1000200
+-top
+@200
+-systolic
+@28
+TOP.SysTop.systolic.clk
+TOP.SysTop.systolic.io_dataIn_valid
+TOP.SysTop.systolic.io_dataIn_payload_last
+TOP.SysTop.systolic.resValid
+@22
+TOP.SysTop.systolic.resData_0[5:0]
+TOP.SysTop.systolic.resData_1[5:0]
+@28
+TOP.SysTop.systolic.io_resOut_valid
+TOP.SysTop.systolic.io_resOut_payload_last
+@22
+TOP.SysTop.systolic.io_resOut_payload_fragment_0[5:0]
+TOP.SysTop.systolic.io_resOut_payload_fragment_1[5:0]
+@200
+-pe00
+@800200
+-pe00
+@28
+TOP.SysTop.systolic.peArray_0_0.io_din_ctrl_valid
+TOP.SysTop.systolic.peArray_0_0.io_din_ctrl_lastOrFlush
+@24
+TOP.SysTop.systolic.peArray_0_0.io_din_payload_data[2:0]
+TOP.SysTop.systolic.peArray_0_0.io_din_payload_weight[2:0]
+TOP.SysTop.systolic.peArray_0_0.io_mulres_payload[5:0]
+@28
+TOP.SysTop.systolic.peArray_0_0.io_mulres_valid
+@1000200
+-pe00
+@200
+-pe10
+-pe01
+@28
+TOP.SysTop.systolic.peArray_1_0_io_mulres_valid
+TOP.SysTop.systolic.peArray_1_0_io_dout_ctrl_lastOrFlush
+TOP.SysTop.systolic.peArray_1_0_io_dout_ctrl_valid
+TOP.SysTop.systolic.peArray_1_0_io_dout_payload_data[2:0]
+TOP.SysTop.systolic.peArray_1_0_io_dout_payload_weight[2:0]
+@22
+TOP.SysTop.systolic.peArray_1_0_io_mulres_payload[5:0]
+[pattern_trace] 1
+[pattern_trace] 0

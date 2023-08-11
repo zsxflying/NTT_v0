@@ -16,13 +16,16 @@ object Accumulator{
 
   def apply(data: SInt, valid: Bool, lastOrFlush: Bool) = {
     new Area {
-      val lastOrFlushReg = RegNext(lastOrFlush)
+      private val lastOrFlushReg = RegNext(lastOrFlush, init = False)
+      private val validReg = RegNext(valid, init = False)
       val value = Reg(data)
       when(lastOrFlushReg){
         value := data
       }.elsewhen(valid){
         value := data + value
       }
+      val validOut = Bool()
+      validOut := validReg && lastOrFlushReg
     }
   }
 

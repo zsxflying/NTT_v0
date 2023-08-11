@@ -4,11 +4,12 @@ import java.io._
 object MatrixOperation {
   /**
    * 生成随机矩阵
+   *
    * @param dataWidth
    * @param size
    * @return
    */
-  def generateRandomMatrix(dataWidth: Int, size: Int): Array[Array[Int]] = {
+  def generateRandomMatrix(dataWidth: Int, size: Int, noNegative: Boolean = false): Array[Array[Int]] = {
     val random = new Random()
     val matrix = Array.ofDim[Int](size, size)
     val minValue = -(1 << (dataWidth - 1))
@@ -17,7 +18,11 @@ object MatrixOperation {
     // 随机生成dataWidth宽度的有符号整数所能表示的整数并填充矩阵
     for (i <- 0 until size) {
       for (j <- 0 until size) {
-        matrix(i)(j) = random.nextInt(maxValue - minValue + 1) + minValue
+        if (noNegative) {
+          matrix(i)(j) = random.nextInt(maxValue)
+        } else {
+          matrix(i)(j) = random.nextInt(maxValue - minValue + 1) + minValue
+        }
       }
     }
 
@@ -25,8 +30,10 @@ object MatrixOperation {
   }
 
   // TODO: 矩阵乘法算法可以优化
+
   /**
    * 计算矩阵乘法
+   *
    * @param matrix0
    * @param matrix1
    * @return
@@ -49,41 +56,34 @@ object MatrixOperation {
 
   /**
    * 生成sram存储数据
+   *
    * @param mat0
    * @param mat1
    * @param mat2
    * @return
    */
   def generateSRAMInput(
-                         mat0: Array[Array[Int]],
-                         mat1: Array[Array[Int]],
-                         mat2: Array[Array[Int]]
+                         matArray: Array[Array[Array[Int]]],
+                         skew: Boolean
                        ): Array[Array[Int]] = {
-    val n = mat0.length
-    val result = Array.fill(4 * n - 1)(Array.fill(n)(0))
 
-    for (i <- 0 until 3 * n) {
-      for (j <- 0 until n) {
-        if (j < n/2){
-          result(i + j)(j) = {
-            if (i < n) {
-              mat0(i)(j)
-            } else if (i < 2 * n) {
-              mat1(i - n)(j)
-            } else {
-              mat2(i - 2 * n)(j)
-            }
+    val arraySize = matArray.length
+    val matSize = matArray(0)(0).length
+    val result = if (skew) {
+      Array.fill(arraySize * matSize + matSize - 1)(Array.fill(matSize)(0))
+    } else {
+      Array.fill(arraySize * matSize)(Array.fill(matSize)(0))
+    }
+
+    for (i <- 0 until arraySize) {
+      for (j <- 0 until matSize) {
+        for (k <- 0 until matSize) {
+          if (skew) {
+            result(i * matSize + j + k)(k) = matArray(i)(j)(k)
+          } else {
+            result(i * matSize + j)(k) = matArray(i)(j)(k)
           }
-        } else {
-          result(i+j-n/2)(j) = {
-            if (i < n) {
-              mat0(i)(j)
-            } else if (i < 2 * n) {
-              mat1(i - n)(j)
-            } else {
-              mat2(i - 2 * n)(j)
-            }
-          }
+
         }
       }
     }
@@ -93,6 +93,7 @@ object MatrixOperation {
 
   /**
    * 将结果sram中的数据转换为人类易读的格式
+   *
    * @param mat
    * @return
    */
@@ -101,14 +102,14 @@ object MatrixOperation {
     val result = Array.fill(matSize)(Array.fill(matSize)(0))
     val depth = matSize * 2 - 1
 
-    for (i <- 0 until matSize){
-      for (j <- 0 until matSize){
+    for (i <- 0 until matSize) {
+      for (j <- 0 until matSize) {
         val idxSum = i + j
-          if (idxSum < matSize){
-            result(i)(j) = sramData(idxSum)(i)
-          }else{
-            result(i)(j) = sramData(idxSum)(matSize - 1 - j)
-          }
+        if (idxSum < matSize) {
+          result(i)(j) = sramData(idxSum)(i)
+        } else {
+          result(i)(j) = sramData(idxSum)(matSize - 1 - j)
+        }
       }
     }
 
@@ -116,7 +117,8 @@ object MatrixOperation {
   }
 }
 
-object MatrixOperationTest extends App{
+object MatrixOperationTest extends App {
+
   import MatrixOperation._
   import myUtil.PrintDump._
 
@@ -125,33 +127,9 @@ object MatrixOperationTest extends App{
   val sramResDepth = matSize * 2 - 1
   // 生成矩阵
   val matrixLeftSet, matrixRightSet = Array.fill(3)(generateRandomMatrix(dataWidth, matSize))
+  printMatrix(matrixLeftSet(0))
+  printMatrix(matrixLeftSet(1))
+  printMatrix(generateSRAMInput(matrixLeftSet, false))
 
-  // 参考结果
-  val refResult = matrixLeftSet.zip(matrixRightSet).map { element =>
-    multiply(element._1, element._2)
-  }
-
-  // 输入sram
-  val sramD = generateSRAMInput(matrixLeftSet(0), matrixLeftSet(1), matrixLeftSet(2))
-  val sramW = generateSRAMInput(matrixRightSet(0), matrixRightSet(1), matrixRightSet(2))
-
-  println("matLeft:")
-  matrixLeftSet.foreach(printMatrix(_))
-  println("sramD:")
-  printMatrix(sramD)
-  println("matRight:")
-  matrixRightSet.foreach(printMatrix(_))
-  println("sramW:")
-  printMatrix(sramW)
-
-  // 结果sram
-  val sramRes0 = Array.fill(sramResDepth)(Array.fill(matSize)(Random.nextInt(10)))
-
-  // 结果sram转换后数据
-  val transRes0 = transformResultMatrix(sramRes0)
-  println("sramRes0:")
-  printMatrix(sramRes0)
-  println("transRes0")
-  printMatrix(transRes0)
 }
 

@@ -30,6 +30,7 @@ class alignas(VL_CACHE_LINE_BYTES) VPE___024root final : public VerilatedModule 
     CData/*0:0*/ PE__DOT__dinCtrlReg_valid;
     CData/*0:0*/ PE__DOT__dinCtrlReg_lastOrFlush;
     CData/*0:0*/ PE__DOT__resAccReg_lastOrFlushReg;
+    CData/*0:0*/ PE__DOT__resAccReg_validReg;
     CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
     CData/*0:0*/ __VactDidInit;
     CData/*0:0*/ __VactContinue;

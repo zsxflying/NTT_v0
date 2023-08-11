@@ -7,7 +7,7 @@ class SRAMWriteOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int) extends 
   val io = new Bundle{
     val valid = in Bool()
     val addr = in UInt(log2Up(depth) bits)
-    val wdata = in Bits(singleDataWidth * dataNumPerLine bits)
+    val wdata = in(SRAMData(singleDataWidth, dataNumPerLine))
   }
 
   // 初始化为0，可后门读写
@@ -19,13 +19,10 @@ class SRAMWriteOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int) extends 
     }
   }.simPublic()
 
-  val din = SRAMData(singleDataWidth,dataNumPerLine)
-  din.assignFromBits(io.wdata)
-
   mem.write(
     enable = io.valid,
     address = io.addr,
-    data = din
+    data = io.wdata
   )
 
   def getMemBin():Array[Array[String]] = {
@@ -34,7 +31,6 @@ class SRAMWriteOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int) extends 
 
   import myUtil.DataConvert._
   def getMemInt():Array[Array[Int]]={
-//    (0 until depth).map(getBigInt(mem, _).binString(mem.getWidth).grouped(singleDataWidth).toArray.map(_.asBin.toInt)).toArray
     (0 until depth).map(getBigInt(mem, _).binString(mem.getWidth).grouped(singleDataWidth).toArray.map(binString2Int(_))).toArray
   }
 

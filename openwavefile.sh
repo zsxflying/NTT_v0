@@ -1,2 +1,2 @@
 #!/bin/bash
-gtkwave ./simWorkspace/PE/test.vcd 
+gtkwave ./simWorkspace/SysTop/test.vcd ./mark.gtkw
