@@ -22,17 +22,22 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   val resTemp = Array.fill(arraySize)(Array.fill(arraySize)(SInt(resWidth bits))) // TODO: 查看是否会有in out属性
   val resData = Array.fill(arraySize)(SInt(resWidth bits))
   val resLast = peArray.last.last.io.mulres.valid
-  val resValid = peArray.flatten.map(_.io.mulres.valid).toSeq.reduceBalancedTree(_ | _) // 平衡二叉树
+  val resValid = {
+    if(config.SKEW_OUTPUT){
+      peArray.head.map(_.io.mulres.valid).toSeq.reduceBalancedTree(_ | _) // 平衡二叉树
+    } else {
+      peArray.flatten.map(_.io.mulres.valid).toSeq.reduceBalancedTree(_ | _) // 平衡二叉树
+    }
+  }
 
   // 端口连接
-  if (config.SKEW_OUTPUT) {
+  io.resOut.last := Delay(resLast, config.RES_OUTPUT_DELAY.toInt, init = False) // last看最后一个元素，delay最少
+  if (config.SKEW_OUTPUT) { // valid看第一个元素，delay随第一个元素
     io.resOut.valid := Delay(resValid, arraySize - 1 + config.RES_OUTPUT_DELAY.toInt, init = False)
-    io.resOut.last := Delay(resLast, arraySize - 1 + config.RES_OUTPUT_DELAY.toInt, init = False)
   } else {
     io.resOut.valid := Delay(resValid, config.RES_OUTPUT_DELAY.toInt, init = False)
-    io.resOut.last := Delay(resLast, config.RES_OUTPUT_DELAY.toInt, init = False)
   }
-  
+
 
 
   // 确保最后一个输入也能从delay中输出
@@ -75,12 +80,11 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
       // 输出结果连接
       resTemp(i)(j) := peArray(i)(j).io.mulres.valid ? peArray(i)(j).io.mulres.payload | S(0).resized // 输出无效时置为0
     }
-
-    resData(i) := resTemp(i).toSeq.reduceBalancedTree(_ | _) // 平衡二叉树
+    resData(i) := resTemp.map(_(i)).toSeq.reduceBalancedTree(_ | _) // 按列进行规约
 
     io.resOut.payload(i) := {
       if (config.SKEW_OUTPUT) {
-        Delay(resData(i), arraySize - 1 - i + config.RES_OUTPUT_DELAY.toInt, when = resValid)
+        Delay(resData(i), arraySize - 1 - i + config.RES_OUTPUT_DELAY.toInt, when = resValid || io.resOut.valid)
       } else {
         Delay(resData(i), config.RES_OUTPUT_DELAY.toInt, when = resValid)
       }

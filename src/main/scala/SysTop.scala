@@ -16,13 +16,13 @@ class SysTop(implicit config: TPUConfig) extends Component {
 
   import MatrixOperation._
 
-  private val matNum = 2
+  private val matNum = config.matNum
   private val inputRamDepth = if (config.SKEW_INPUT) matNum * arraySize else matNum * arraySize + arraySize - 1
   private val outputRamDepth = if (config.SKEW_OUTPUT) matNum * arraySize else matNum * arraySize + arraySize - 1
   val initData = Array.fill(matNum)(generateRandomMatrix(dataWidth, arraySize, config.debug_noNegative))
   val initWeight = Array.fill(matNum)(generateRandomMatrix(weightWidth, arraySize, config.debug_noNegative))
   val resRef = initData.zip(initWeight).map { case (l, r) => multiply(l, r) }
-  val dataRamInput = generateSRAMInput(initData, skew = !config.SKEW_INPUT)
+  val dataRamInput = generateSRAMInput(initData.map(_.transpose), skew = !config.SKEW_INPUT) // data需要转置
   val weightRamInput = generateSRAMInput(initWeight, skew = !config.SKEW_INPUT)
 
   val systolic = new SystolicArray()
@@ -34,13 +34,13 @@ class SysTop(implicit config: TPUConfig) extends Component {
   systolic.io.dataIn.payload.fragment := dataRam.io.rdata.data
   systolic.io.weightIn := weightRam.io.rdata.data
 
-  val inputCnt = Counter(0, 20000)
+  val inputCnt = Counter(0, (matNum + 3) * arraySize)
   dataRam.io.addr := inputCnt.resized
   weightRam.io.addr := inputCnt.resized
 
   val lastCnt = Counter(0, arraySize - 1)
 
-  val outputCnt = Counter(0, 20000)
+  val outputCnt = Counter(0, (matNum + 3) * arraySize)
   resRam.io.addr := outputCnt.resized
   resRam.io.wdata.data := systolic.io.resOut.payload.fragment
   resRam.io.valid := systolic.io.resOut.valid
@@ -49,7 +49,7 @@ class SysTop(implicit config: TPUConfig) extends Component {
     outputCnt.increment()
   }
 
-  // TODO: 为什么这段代码就提示找不到idel类型？？？
+  // TODO: 为什么这段代码就提示找不到idel类型？？？(内部逻辑非最新）
 //  val ctrlFsm = new StateMachine {
 //    io.done := False
 //    systolic.io.dataIn.valid := False
@@ -129,7 +129,6 @@ class SysTop(implicit config: TPUConfig) extends Component {
 
     loadAndFlush.whenIsActive {
       inputCnt.increment()
-      outputCnt.increment()
       lastCnt.increment()
       io.done := False
       systolic.io.dataIn.valid := False
@@ -139,10 +138,8 @@ class SysTop(implicit config: TPUConfig) extends Component {
 
     computing.whenIsActive{
       inputCnt.increment()
-      outputCnt.increment()
       lastCnt.increment()
       io.done := False
-
       when(lastCnt === 0) {
         systolic.io.dataIn.last := True
       } otherwise {

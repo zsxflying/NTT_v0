@@ -77,11 +77,11 @@ object MatrixOperation {
 
     for (i <- 0 until arraySize) {
       for (j <- 0 until matSize) {
-        for (k <- 0 until matSize) {
+        for (k <- 0 until matSize) { // 需要左右翻转
           if (skew) {
-            result(i * matSize + j + k)(k) = matArray(i)(j)(k)
+            result(i * matSize + j + k)(k) = matArray(i)(j)(matSize - 1 - k)
           } else {
-            result(i * matSize + j)(k) = matArray(i)(j)(k)
+            result(i * matSize + j)(k) = matArray(i)(j)(matSize - 1 - k)
           }
 
         }
