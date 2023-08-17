@@ -1,0 +1,51 @@
+2023.08.12 14:52:43 INFO  Started: Metals version 1.0.0 in folders '/home/rick/NTTAccelerator/NTT_v0' for client Visual Studio Code 1.77.0.
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.license.VersionPrinter printVersionOnly
+INFO: Flyway Community Edition 9.20.1 by Redgate
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: See release notes here: https://rd.gt/416ObMi
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: 
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.database.base.BaseDatabaseType createDatabase
+INFO: Database: jdbc:h2:file:/home/rick/NTTAccelerator/NTT_v0/.metals/metals (H2 2.1)
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory allAppliedMigrations
+INFO: Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.command.DbValidate validate
+INFO: Successfully validated 4 migrations (execution time 00:00.017s)
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory create
+INFO: Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.command.DbMigrate migrateGroup
+INFO: Current version of schema "PUBLIC": << Empty Schema >>
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "1 - Create tables"
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "2 - Server discovery"
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "3 - Jar symbols"
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "4 - Fingerprints"
+Aug 12, 2023 2:52:44 PM org.flywaydb.core.internal.command.DbMigrate logSummary
+INFO: Successfully applied 4 migrations to schema "PUBLIC", now at version v4 (execution time 00:00.025s)
+2023.08.12 14:52:44 INFO  time: initialize in 0.6s
+2023.08.12 14:52:46 WARN  Build server is not auto-connectable.
+2023.08.12 14:53:06 INFO  Shutting down server
+2023.08.12 14:53:06 INFO  shutting down Metals
+2023.08.12 14:53:06 INFO  Exiting server
+2023.08.12 14:53:17 INFO  Started: Metals version 1.0.0 in folders '/home/rick/NTTAccelerator/NTT_v0' for client Visual Studio Code 1.77.0.
+Aug 12, 2023 2:53:17 PM org.flywaydb.core.internal.license.VersionPrinter printVersionOnly
+INFO: Flyway Community Edition 9.20.1 by Redgate
+Aug 12, 2023 2:53:17 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: See release notes here: https://rd.gt/416ObMi
+Aug 12, 2023 2:53:17 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: 
+Aug 12, 2023 2:53:17 PM org.flywaydb.core.internal.database.base.BaseDatabaseType createDatabase
+INFO: Database: jdbc:h2:file:/home/rick/NTTAccelerator/NTT_v0/.metals/metals (H2 2.1)
+Aug 12, 2023 2:53:17 PM org.flywaydb.core.internal.command.DbValidate validate
+INFO: Successfully validated 4 migrations (execution time 00:00.021s)
+Aug 12, 2023 2:53:17 PM org.flywaydb.core.internal.command.DbMigrate migrateGroup
+INFO: Current version of schema "PUBLIC": 4
+Aug 12, 2023 2:53:17 PM org.flywaydb.core.internal.command.DbMigrate logSummary
+INFO: Schema "PUBLIC" is up to date. No migration necessary.
+2023.08.12 14:53:18 INFO  time: initialize in 0.56s
+2023.08.12 14:53:19 WARN  Build server is not auto-connectable.
+Aug 12, 2023 3:00:30 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace

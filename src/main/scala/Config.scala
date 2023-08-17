@@ -13,6 +13,6 @@ object Config {
     onlyStdLogicVectorAtTopLevelIo = true
   )
 
-  def sim = SimConfig.withConfig(spinal).withWave.withVerilator
+  def sim = SimConfig.withConfig(spinal).withWave.withVcdWave.withVerilator
 
 }
