@@ -15,7 +15,7 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
     val dataIn = slave Flow (Fragment(Vec.fill(arraySize)(UInt(dataWidth bits)))) // 数据控制信号沿着data方向传递
     val weightIn = in(Vec.fill(arraySize)(UInt(weightWidth bits)))
     val resOut = master Flow (Fragment(Vec.fill(arraySize)(UInt(resWidth bits))))
-    val modIn = slave Stream(UInt(modWidth bits))
+    val modIn = slave Stream (UInt(modWidth bits))
   }
 
 
@@ -26,7 +26,7 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   val resData = Array.fill(arraySize)(UInt(resWidth bits))
   val resLast = peArray.last.last.io.mulres.valid
   val resValid = {
-    if(config.SKEW_OUTPUT){
+    if (config.SKEW_OUTPUT) {
       peArray.head.map(_.io.mulres.valid).toSeq.reduceBalancedTree(_ | _) // 平衡二叉树
     } else {
       peArray.flatten.map(_.io.mulres.valid).toSeq.reduceBalancedTree(_ | _) // 平衡二叉树
@@ -36,7 +36,11 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   // 生成求模单元
   val modUnit = new ModUnit()
   io.modIn <> modUnit.io.modIn
-  modUnit.io.resIn.valid := resValid
+  modUnit.io.resIn.valid := (if (config.SKEW_OUTPUT) {
+    resValid || Delay(resValid, arraySize - 1, init = False)
+  } else {
+    resValid
+  })
 
 
   // 端口连接
@@ -46,7 +50,6 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   } else {
     io.resOut.valid := Delay(modUnit.io.resOut.valid, config.RES_OUTPUT_DELAY.toInt, init = False)
   }
-
 
 
   // 确保最后一个输入也能从delay中输出
@@ -81,7 +84,7 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
       if (i != arraySize - 1) {
         peArray(i + 1)(j).io.din.payload.weight := peArray(i)(j).io.dout.payload.weight
       }
-      if (j != arraySize - 1){
+      if (j != arraySize - 1) {
         peArray(i)(j + 1).io.din.payload.data := peArray(i)(j).io.dout.payload.data
         peArray(i)(j + 1).io.din.ctrl := peArray(i)(j).io.dout.ctrl
       }
@@ -100,8 +103,6 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
       }
     }
   }
-
-
 
 
 }
