@@ -36,11 +36,7 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   // 生成求模单元
   val modUnit = new ModUnit()
   io.modIn <> modUnit.io.modIn
-  modUnit.io.resIn.valid := (if (config.SKEW_OUTPUT) {
-    resValid || Delay(resValid, arraySize - 1, init = False)
-  } else {
-    resValid
-  })
+  modUnit.io.resIn.valid := resValid
 
 
   // 端口连接

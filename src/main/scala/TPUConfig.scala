@@ -2,7 +2,7 @@ class TPUConfig() {
   // size config
   val DATA_WIDTH = 4
   val WEIGHT_WIDTH = DATA_WIDTH
-  val ARRAY_SIZE = 4
+  val ARRAY_SIZE = 8
   val MOD_WIDTH = DATA_WIDTH
 
   val RESULT_WIDTH = DATA_WIDTH + WEIGHT_WIDTH // PE单元乘法结果的宽度

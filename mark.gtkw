@@ -1,19 +1,19 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Sat Aug 19 04:30:33 2023
+[*] Sat Aug 19 07:19:31 2023
 [*]
 [dumpfile] "/home/rick/NTTAccelerator/NTT_v0/simWorkspace/SysTop/test.vcd"
-[dumpfile_mtime] "Sat Aug 19 04:28:01 2023"
-[dumpfile_size] 75543
+[dumpfile_mtime] "Sat Aug 19 07:19:14 2023"
+[dumpfile_size] 75569
 [savefile] "/home/rick/NTTAccelerator/NTT_v0/mark.gtkw"
-[timestart] 0
+[timestart] 12
 [size] 3288 2002
 [pos] -1 -1
-*-4.613933 190 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.613933 380 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.SysTop.
 [treeopen] TOP.SysTop.systolic.
-[sst_width] 730
+[sst_width] 388
 [signals_width] 702
 [sst_expanded] 1
 [sst_vpaned_height] 875
@@ -37,9 +37,7 @@ TOP.SysTop.systolic_io_resOut_valid
 TOP.SysTop.systolic_io_resOut_payload_last
 TOP.SysTop.systolic_io_resOut_valid
 TOP.SysTop.systolic_io_resOut_payload_last
-@22
 TOP.SysTop.systolic_io_resOut_payload_fragment_0[7:0]
-@24
 TOP.SysTop.systolic_io_resOut_payload_fragment_1[7:0]
 @1000200
 -top
@@ -91,9 +89,16 @@ TOP.SysTop.systolic.peArray_1_1.io_mulres_valid
 TOP.SysTop.systolic.peArray_1_1.io_mulres_payload[7:0]
 @200
 -modunit\
+@22
+TOP.SysTop.systolic.modUnit_1.io_modIn_payload[3:0]
+TOP.SysTop.systolic.modUnit_1.shiftReg_0[7:0]
 @28
 TOP.SysTop.systolic.modUnit_1.io_resIn_valid
-@29
+@24
+TOP.SysTop.systolic.modUnit_1.io_resIn_payload_0[7:0]
+@22
+TOP.SysTop.systolic.modUnit_1.io_resOut_payload_0[7:0]
+@28
 TOP.SysTop.systolic.modUnit_1.io_resOut_valid
 [pattern_trace] 1
 [pattern_trace] 0
