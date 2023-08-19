@@ -31,7 +31,7 @@ class SRAMWriteOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int) extends 
 
   import myUtil.DataConvert._
   def getMemInt():Array[Array[Int]]={
-    (0 until depth).map(getBigInt(mem, _).binString(mem.getWidth).grouped(singleDataWidth).toArray.map(binString2Int(_))).toArray
+    (0 until depth).map(getBigInt(mem, _).binString(mem.getWidth).grouped(singleDataWidth).toArray.map(binUIntString2Int(_))).toArray
   }
 
 }

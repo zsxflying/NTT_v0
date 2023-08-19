@@ -4,8 +4,8 @@ import spinal.lib.{MS, _}
 import scala.math._
 
 case class PEPayload(implicit config:TPUConfig) extends Bundle{
-  val data = SInt(config.DATA_WIDTH bits)
-  val weight = SInt(config.WEIGHT_WIDTH bits)
+  val data = UInt(config.DATA_WIDTH bits)
+  val weight = UInt(config.WEIGHT_WIDTH bits)
 }
 
 case class PECtrlSinals(implicit config:TPUConfig) extends Bundle{
@@ -31,7 +31,7 @@ class PEIO(implicit config:TPUConfig) extends Bundle {
   // TODO: 添加有效信号是否可以降低功耗？ --待验证
   val din = slave (PEData())
   val dout = master (PEData())
-  val mulres = master Flow(SInt(config.RESULT_WIDTH bits))
+  val mulres = master Flow(UInt(config.RESULT_WIDTH bits))
 }
 
 
@@ -48,14 +48,10 @@ class PE(implicit config:TPUConfig) extends Component {
 
   val resAccWidth = config.DATA_WIDTH + config.WEIGHT_WIDTH + log2Up(config.ARRAY_SIZE)
   val resAccReg = Accumulator(multiplyRes.resize(resAccWidth bits), dinCtrlReg.valid, dinCtrlReg.lastOrFlush)
-  val resAccRegValue0 = resAccReg.value(resAccWidth - 1)
-  val resAccRegValue1 = resAccReg.value(resAccWidth - 1 downto (resAccWidth - log2Up(config.ARRAY_SIZE) - 1))
-  val MAX_VALUE = S((pow(2, config.RESULT_WIDTH - 1) - 1).toInt, config.RESULT_WIDTH bits) // 输出结果的最大值
-  val MIN_VALUE = S(-(pow(2, config.RESULT_WIDTH - 1)).toInt, config.RESULT_WIDTH bits) // 输出结果的最小值
-  val cond0 = (resAccRegValue0 === False) && (resAccRegValue1 =/= S(0))
-  val cond1 = (resAccRegValue0 === True) && (resAccRegValue1 =/= S(-1).resized)
+  val resAccRegValue0 = resAccReg.value(resAccWidth - 1 downto config.RESULT_WIDTH)
+  val MAX_VALUE = U((pow(2, config.RESULT_WIDTH) - 1).toInt, config.RESULT_WIDTH bits) // 输出结果的最大值
 
-  io.mulres.payload := Mux(cond0, MAX_VALUE, Mux(cond1, MIN_VALUE, resAccReg.value.resized)) // 输出数据被压缩到指定范围
+  io.mulres.payload := Mux(resAccRegValue0 =/= U(0), MAX_VALUE, resAccReg.value.resized)// 输出数据被压缩到指定范围
   io.mulres.valid := resAccReg.validOut
 }
 

@@ -4,7 +4,7 @@ import spinal.core.sim._
 import spinal.lib._
 
 case class SRAMData(dataWidth:Int, num:Int) extends Bundle{
-  val data = Vec.fill(num)(SInt(dataWidth bits))
+  val data = Vec.fill(num)(UInt(dataWidth bits))
 
   def initValue(arr:Array[Int]): this.type = {
 //    data.reverse.zip(arr).foreach{case (d, a) => d := a}

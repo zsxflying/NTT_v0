@@ -12,7 +12,7 @@ object DataConvert{
    * @param str 二进制有符号数字符串
    * @return
    */
-  def binString2Int(str: String): Int = {
+  def binSIntString2Int(str: String): Int = {
     val s = str.toCharArray
     if (s(0) == '1') {
       for (i <- 1 until s.length) {
@@ -26,6 +26,10 @@ object DataConvert{
     } else {
       s.mkString.asBin.toInt
     }
+  }
+
+  def binUIntString2Int(str: String): Int = {
+    str.asBin.toInt
   }
 
   // Vec转

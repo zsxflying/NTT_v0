@@ -9,18 +9,21 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   val dataWidth = config.DATA_WIDTH
   val weightWidth = config.WEIGHT_WIDTH
   val resWidth = config.RESULT_WIDTH
+  val modWidth = config.MOD_WIDTH
 
   val io = new Bundle {
-    val dataIn = slave Flow (Fragment(Vec.fill(arraySize)(SInt(dataWidth bits)))) // 数据控制信号沿着data方向传递
-    val weightIn = in(Vec.fill(arraySize)(SInt(weightWidth bits)))
-    val resOut = master Flow (Fragment(Vec.fill(arraySize)(SInt(resWidth bits))))
+    val dataIn = slave Flow (Fragment(Vec.fill(arraySize)(UInt(dataWidth bits)))) // 数据控制信号沿着data方向传递
+    val weightIn = in(Vec.fill(arraySize)(UInt(weightWidth bits)))
+    val resOut = master Flow (Fragment(Vec.fill(arraySize)(UInt(resWidth bits))))
+    val modIn = slave Stream(UInt(modWidth bits))
   }
+
 
   // 生成PE阵列
   val peArray = Array.fill(arraySize)(Array.fill(arraySize)(new PE()))
 
-  val resTemp = Array.fill(arraySize)(Array.fill(arraySize)(SInt(resWidth bits)))
-  val resData = Array.fill(arraySize)(SInt(resWidth bits))
+  val resTemp = Array.fill(arraySize)(Array.fill(arraySize)(UInt(resWidth bits)))
+  val resData = Array.fill(arraySize)(UInt(resWidth bits))
   val resLast = peArray.last.last.io.mulres.valid
   val resValid = {
     if(config.SKEW_OUTPUT){
@@ -30,12 +33,18 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
     }
   }
 
+  // 生成求模单元
+  val modUnit = new ModUnit()
+  io.modIn <> modUnit.io.modIn
+  modUnit.io.resIn.valid := resValid
+
+
   // 端口连接
   io.resOut.last := Delay(resLast, config.RES_OUTPUT_DELAY.toInt, init = False) // last看最后一个元素，delay最少
   if (config.SKEW_OUTPUT) { // valid看第一个元素，delay随第一个元素
-    io.resOut.valid := Delay(resValid, arraySize - 1 + config.RES_OUTPUT_DELAY.toInt, init = False)
+    io.resOut.valid := Delay(modUnit.io.resOut.valid, arraySize - 1 + config.RES_OUTPUT_DELAY.toInt, init = False)
   } else {
-    io.resOut.valid := Delay(resValid, config.RES_OUTPUT_DELAY.toInt, init = False)
+    io.resOut.valid := Delay(modUnit.io.resOut.valid, config.RES_OUTPUT_DELAY.toInt, init = False)
   }
 
 
@@ -78,18 +87,21 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
       }
 
       // 输出结果连接
-      resTemp(i)(j) := peArray(i)(j).io.mulres.valid ? peArray(i)(j).io.mulres.payload | S(0).resized // 输出无效时置为0
+      resTemp(i)(j) := peArray(i)(j).io.mulres.valid ? peArray(i)(j).io.mulres.payload | U(0).resized // 输出无效时置为0
     }
     resData(i) := resTemp.map(_(i)).toSeq.reduceBalancedTree(_ | _) // 按列进行规约
+    modUnit.io.resIn.payload(i) := resData(i)
 
     io.resOut.payload(i) := {
       if (config.SKEW_OUTPUT) {
-        Delay(resData(i), arraySize - 1 - i + config.RES_OUTPUT_DELAY.toInt, when = resValid || io.resOut.valid)
+        Delay(modUnit.io.resOut.payload(i), arraySize - 1 - i + config.RES_OUTPUT_DELAY.toInt, when = modUnit.io.resOut.valid || io.resOut.valid)
       } else {
-        Delay(resData(i), config.RES_OUTPUT_DELAY.toInt, when = resValid)
+        Delay(modUnit.io.resOut.payload(i), config.RES_OUTPUT_DELAY.toInt, when = modUnit.io.resOut.valid)
       }
     }
   }
+
+
 
 
 }

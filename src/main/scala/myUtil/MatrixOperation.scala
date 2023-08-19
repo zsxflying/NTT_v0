@@ -9,7 +9,7 @@ object MatrixOperation {
    * @param size
    * @return
    */
-  def generateRandomMatrix(dataWidth: Int, size: Int, noNegative: Boolean = false): Array[Array[Int]] = {
+  def generateRandomSIntMatrix(dataWidth: Int, size: Int, noNegative: Boolean = false): Array[Array[Int]] = {
     val random = new Random()
     val matrix = Array.ofDim[Int](size, size)
     val minValue = -(1 << (dataWidth - 1))
@@ -26,6 +26,12 @@ object MatrixOperation {
       }
     }
 
+    matrix
+  }
+
+  def generateMaxUIntMatrix(dataWidth: Int, size: Int): Array[Array[Int]] = {
+    val maxvalue = (1 << dataWidth) - 1
+    val matrix = Array.fill(size)(Array.fill(size)(maxvalue))
     matrix
   }
 
@@ -126,7 +132,7 @@ object MatrixOperationTest extends App {
   val matSize = 3
   val sramResDepth = matSize * 2 - 1
   // 生成矩阵
-  val matrixLeftSet, matrixRightSet = Array.fill(3)(generateRandomMatrix(dataWidth, matSize))
+  val matrixLeftSet, matrixRightSet = Array.fill(3)(generateRandomSIntMatrix(dataWidth, matSize))
   printMatrix(matrixLeftSet(0))
   printMatrix(matrixLeftSet(1))
   printMatrix(generateSRAMInput(matrixLeftSet, false))
