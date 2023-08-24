@@ -49,3 +49,36 @@ INFO: Schema "PUBLIC" is up to date. No migration necessary.
 2023.08.12 14:53:19 WARN  Build server is not auto-connectable.
 Aug 12, 2023 3:00:30 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
 INFO: Unsupported notification method: $/setTrace
+2023.08.19 16:17:34 INFO  Shutting down server
+2023.08.19 16:17:34 INFO  shutting down Metals
+2023.08.19 16:17:34 ERROR Unexpected error initializing server: 
+org.eclipse.lsp4j.jsonrpc.ResponseErrorException: Request window/showMessageRequest failed with message: Canceled
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleResponse(RemoteEndpoint.java:209)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:193)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.lang.Thread.run(Thread.java:829)
+
+2023.08.19 16:17:34 INFO  Exiting server
+2023.08.21 10:43:26 INFO  Started: Metals version 1.0.0 in folders '/home/rick/NTTAccelerator/NTT_v0' for client Visual Studio Code 1.77.0.
+Aug 21, 2023 10:43:26 AM org.flywaydb.core.internal.license.VersionPrinter printVersionOnly
+INFO: Flyway Community Edition 9.20.1 by Redgate
+Aug 21, 2023 10:43:26 AM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: See release notes here: https://rd.gt/416ObMi
+Aug 21, 2023 10:43:26 AM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: 
+Aug 21, 2023 10:43:27 AM org.flywaydb.core.internal.database.base.BaseDatabaseType createDatabase
+INFO: Database: jdbc:h2:file:/home/rick/NTTAccelerator/NTT_v0/.metals/metals (H2 2.1)
+Aug 21, 2023 10:43:27 AM org.flywaydb.core.internal.command.DbValidate validate
+INFO: Successfully validated 4 migrations (execution time 00:00.030s)
+Aug 21, 2023 10:43:27 AM org.flywaydb.core.internal.command.DbMigrate migrateGroup
+INFO: Current version of schema "PUBLIC": 4
+Aug 21, 2023 10:43:27 AM org.flywaydb.core.internal.command.DbMigrate logSummary
+INFO: Schema "PUBLIC" is up to date. No migration necessary.
+2023.08.21 10:43:27 INFO  time: initialize in 0.82s
+2023.08.21 10:43:32 WARN  Build server is not auto-connectable.

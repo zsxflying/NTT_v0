@@ -29,6 +29,21 @@ object MatrixOperation {
     matrix
   }
 
+  def generateRandomUIntMatrix(dataWidth: Int, size: Int): Array[Array[Int]] = {
+    val random = new Random()
+    val matrix = Array.ofDim[Int](size, size)
+    val maxValue = (1 << dataWidth) - 1
+
+    // 随机生成dataWidth宽度的有符号整数所能表示的整数并填充矩阵
+    for (i <- 0 until size) {
+      for (j <- 0 until size) {
+        matrix(i)(j) = random.nextInt(maxValue + 1)
+      }
+    }
+
+    matrix
+  }
+
   def generateMaxUIntMatrix(dataWidth: Int, size: Int): Array[Array[Int]] = {
     val maxvalue = (1 << dataWidth) - 1
     val matrix = Array.fill(size)(Array.fill(size)(maxvalue))
@@ -44,16 +59,18 @@ object MatrixOperation {
    * @param matrix1
    * @return
    */
-  def multiply(matrix0: Array[Array[Int]], matrix1: Array[Array[Int]]) = {
+  def multiply(matrix0: Array[Array[Int]], matrix1: Array[Array[Int]], resWidth:Int) = {
     assert(matrix1.length == matrix0.length)
     val numRows = matrix0.length
     val resultMatrix = Array.fill(numRows)(Array.fill(numRows)(0))
+    val maxValue = (1 << resWidth) - 1
 
     for (i <- 0 until numRows) {
       for (j <- 0 until numRows) {
         for (k <- 0 until numRows) {
           resultMatrix(i)(j) += matrix0(i)(k) * matrix1(k)(j)
         }
+        if (resultMatrix(i)(j) > maxValue) resultMatrix(i)(j) = maxValue
       }
     }
 

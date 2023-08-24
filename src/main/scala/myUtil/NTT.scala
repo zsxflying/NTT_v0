@@ -1,0 +1,5 @@
+package myUtil
+
+class NTT {
+
+}
