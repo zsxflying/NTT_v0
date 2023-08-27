@@ -1,4 +1,4 @@
-import MatrixOperation._
+import myUtil.MatrixOperation._
 import spinal.core.sim._
 
 object SysTopTest extends App {

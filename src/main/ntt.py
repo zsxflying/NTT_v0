@@ -28,9 +28,18 @@ g = 3
 
 root_16 = big_num_mod_pow(g, (mod-1)//16, mod)
 
-inputArray_16 = [random.randint(0, mod) for i in range(16)]
-res_16 = ntt(inputArray_16, mod)
+# inputArray_16 = [random.randint(0, mod) for i in range(16)]
+# res_16 = ntt(inputArray_16, mod)
 
-print("vandermonde_16: ", vandermonde(16, root_16, mod))
-print("inputArray_16: ", inputArray_16)
-print("res_16: ", res_16)
+root_4 = big_num_mod_pow(g,(mod-1)//4,mod)
+inputArray_4 = [56199, 14191, 12134,12035]
+res_4 = ntt(inputArray_4, mod)
+
+
+# print("vandermonde_16: ", vandermonde(16, root_16, mod))
+# print("inputArray_16: ", inputArray_16)
+# print("res_16: ", res_16)
+
+print("vandermonde_4: ", vandermonde(4, root_4, mod))
+print("inputArray_4: ", inputArray_4)
+print("res_4: ", res_4)

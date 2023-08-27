@@ -1,4 +1,4 @@
-import MatrixOperation.generateRandomSIntMatrix
+import myUtil.MatrixOperation.generateRandomSIntMatrix
 import spinal.core._
 import spinal.lib.fsm._
 import spinal.lib._
@@ -19,7 +19,7 @@ class SysTop(
   private val resWidth = config.RESULT_WIDTH
   private val modWidth = config.MOD_WIDTH
 
-  import MatrixOperation._
+  import myUtil.MatrixOperation._
 
   private val matNum = config.matNum
   private val inputRamDepth = if (config.SKEW_INPUT) matNum * arraySize else matNum * arraySize + arraySize - 1

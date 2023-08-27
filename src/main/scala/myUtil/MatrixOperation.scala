@@ -1,3 +1,4 @@
+package myUtil
 import scala.util.Random
 import java.io._
 
@@ -62,7 +63,7 @@ object MatrixOperation {
   def multiply(matrix0: Array[Array[Int]], matrix1: Array[Array[Int]], resWidth:Int) = {
     assert(matrix1.length == matrix0.length)
     val numRows = matrix0.length
-    val resultMatrix = Array.fill(numRows)(Array.fill(numRows)(0))
+    val resultMatrix= Array.fill(numRows)(Array.fill(numRows)(0))
     val maxValue = (1 << resWidth) - 1
 
     for (i <- 0 until numRows) {

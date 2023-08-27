@@ -1,6 +1,6 @@
 class TPUConfig() {
   // size config
-  val DATA_WIDTH = 4
+  val DATA_WIDTH = 8  // 改成bigint之前不能超过15
   val WEIGHT_WIDTH = DATA_WIDTH
   val ARRAY_SIZE = 8
   val MOD_WIDTH = DATA_WIDTH
