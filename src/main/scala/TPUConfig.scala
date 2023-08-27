@@ -1,11 +1,14 @@
+import spinal.core.log2Up
+
 class TPUConfig() {
   // size config
-  val DATA_WIDTH = 8  // 改成bigint之前不能超过15
+  val DATA_WIDTH = 8  // 不能小于3
   val WEIGHT_WIDTH = DATA_WIDTH
   val ARRAY_SIZE = 8
   val MOD_WIDTH = DATA_WIDTH
 
-  val RESULT_WIDTH = DATA_WIDTH + WEIGHT_WIDTH // PE单元乘法结果的宽度
+//  val RESULT_WIDTH = DATA_WIDTH + WEIGHT_WIDTH + log2Up(ARRAY_SIZE)// PE单元乘法结果的宽度
+  val RESULT_WIDTH = DATA_WIDTH + WEIGHT_WIDTH// PE单元乘法结果的宽度
 
   // functional config
   var MULTIPLY_CYCLE = 0 // 默认为异步乘法

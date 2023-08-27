@@ -49,7 +49,7 @@ class PE(implicit config:TPUConfig) extends Component {
   val resAccWidth = config.DATA_WIDTH + config.WEIGHT_WIDTH + log2Up(config.ARRAY_SIZE)
   val resAccReg = Accumulator(multiplyRes.resize(resAccWidth bits), dinCtrlReg.valid, dinCtrlReg.lastOrFlush)
   val resAccRegValue0 = resAccReg.value(resAccWidth - 1 downto config.RESULT_WIDTH)
-  val MAX_VALUE = U((pow(2, config.RESULT_WIDTH) - 1).toInt, config.RESULT_WIDTH bits) // 输出结果的最大值
+  val MAX_VALUE = U((BigInt(1) << config.RESULT_WIDTH) - 1, config.RESULT_WIDTH bits) // 输出结果的最大值
 
   io.mulres.payload := Mux(resAccRegValue0 =/= U(0), MAX_VALUE, resAccReg.value.resized)// 输出数据被压缩到指定范围
   io.mulres.valid := resAccReg.validOut

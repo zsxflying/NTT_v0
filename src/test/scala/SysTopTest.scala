@@ -10,7 +10,7 @@ object SysTopTest extends App {
   val resWidth = config.RESULT_WIDTH
   val initData = Array.fill(matNum)(generateRandomUIntMatrix(weightWidth, arraySize))
   val initWeight = Array.fill(matNum)(generateRandomUIntMatrix(weightWidth, arraySize))
-  val initMod = Array(Array(3), Array(8), Array(15), Array(9))
+  val initMod = Array(Array(BigInt(3)), Array(BigInt(8)), Array(BigInt(15)), Array(BigInt(9)))
   val resMulRef = initData.zip(initWeight).map { case (l, r) => multiply(l, r, resWidth) }
   val resRef = initData.zip(initWeight).zipWithIndex.map {
     case ((l, r), idx) =>

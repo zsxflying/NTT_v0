@@ -11,7 +11,7 @@ class SRAMWriteOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int) extends 
   }
 
   // 初始化为0，可后门读写
-  val initData = Array.fill(depth)(Array.fill(dataNumPerLine)(0))
+  val initData = Array.fill(depth)(Array.fill(dataNumPerLine)(BigInt(0)))
   val mem = new Mem(SRAMData(singleDataWidth, dataNumPerLine), depth).init {
     val arr = Array.fill(depth)(SRAMData(singleDataWidth, dataNumPerLine))
     arr.zip(initData).map {
@@ -30,7 +30,7 @@ class SRAMWriteOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int) extends 
   }
 
   import myUtil.DataConvert._
-  def getMemInt():Array[Array[Int]]={
+  def getMemInt():Array[Array[BigInt]]={
     (0 until depth).map(getBigInt(mem, _).binString(mem.getWidth).grouped(singleDataWidth).toArray.map(binUIntString2Int(_))).toArray
   }
 

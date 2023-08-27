@@ -1,7 +1,7 @@
 import spinal.core._
 import spinal.core.sim._
 
-class SRAMReadOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int, initData:Array[Array[Int]]) extends Component{
+class SRAMReadOnly(singleDataWidth:Int, dataNumPerLine:Int, depth:Int, initData:Array[Array[BigInt]]) extends Component{
   // 同步读
   val io = new Bundle{
     val addr = in UInt(log2Up(depth) bits)

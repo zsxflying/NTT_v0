@@ -6,14 +6,14 @@ import spinal.lib._
 case class SRAMData(dataWidth:Int, num:Int) extends Bundle{
   val data = Vec.fill(num)(UInt(dataWidth bits))
 
-  def initValue(arr:Array[Int]): this.type = {
+  def initValue(arr:Array[BigInt]): this.type = {
 //    data.reverse.zip(arr).foreach{case (d, a) => d := a}
     data.reverse.zip(arr).foreach{case (d, a) => d := a}
     this
   }
 }
 
-class SRAM(singleDataWidth:Int, dataNumPerLine:Int, depth:Int, initData:Array[Array[Int]]) extends Component{
+class SRAM(singleDataWidth:Int, dataNumPerLine:Int, depth:Int, initData:Array[Array[BigInt]]) extends Component{
   // 同步读写
   val io = new Bundle{
     val valid = in Bool()
@@ -48,7 +48,7 @@ object SRAM extends App{
   val singleDataWidth = 8
   val dataNumPerLine = 3
   val depth = 2
-  val initData = Array.fill(depth)(Array(-1,2,3))
+  val initData = Array.fill(depth)(Array(BigInt(-1),BigInt(2),BigInt(3)))
   println(initData)
   Config.spinal.generateVerilog(new SRAM(singleDataWidth, dataNumPerLine, depth, initData))
   Config.spinal.generateVerilog(new SRAMReadOnly(singleDataWidth, dataNumPerLine, depth, initData))

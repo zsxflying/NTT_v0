@@ -4,9 +4,9 @@ import spinal.lib.fsm._
 import spinal.lib._
 
 class SysTop(
-              initData: Array[Array[Array[Int]]],
-              initWeight: Array[Array[Array[Int]]],
-              initMod: Array[Array[Int]]
+              initData: Array[Array[Array[BigInt]]],
+              initWeight: Array[Array[Array[BigInt]]],
+              initMod: Array[Array[BigInt]]
             )(implicit config: TPUConfig) extends Component {
   val io = new Bundle {
     val start = in Bool()
@@ -193,6 +193,6 @@ object SysTopGen extends App {
   val arraySize = config.ARRAY_SIZE
   val initData = Array.fill(matNum)(generateRandomSIntMatrix(dataWidth, arraySize, config.debug_noNegative))
   val initWeight = Array.fill(matNum)(generateRandomSIntMatrix(weightWidth, arraySize, config.debug_noNegative))
-  val initMod = Array.fill(matNum)(Array(13))
+  val initMod = Array.fill(matNum)(Array(BigInt(12)))
   Config.spinal.generateVerilog(new SysTop(initData, initWeight,initMod))
 }
