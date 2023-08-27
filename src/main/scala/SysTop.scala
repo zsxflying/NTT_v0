@@ -16,7 +16,8 @@ class SysTop(
   private val arraySize = config.ARRAY_SIZE
   private val dataWidth = config.DATA_WIDTH
   private val weightWidth = config.WEIGHT_WIDTH
-  private val resWidth = config.RESULT_WIDTH
+  private val mulResWidth = config.MUL_RES_WIDTH
+  private val modResWidth = config.MOD_RES_WIDTH
   private val modWidth = config.MOD_WIDTH
 
   import myUtil.MatrixOperation._
@@ -31,7 +32,7 @@ class SysTop(
   val systolic = new SystolicArray()
   val dataRam = new SRAMReadOnly(dataWidth, arraySize, inputRamDepth, dataRamInput)
   val weightRam = new SRAMReadOnly(weightWidth, arraySize, inputRamDepth, weightRamInput)
-  val resRam = new SRAMWriteOnly(resWidth, arraySize, outputRamDepth)
+  val resRam = new SRAMWriteOnly(modResWidth, arraySize, outputRamDepth)
   val modRam = new SRAMReadOnly(modWidth, 1, matNum, initMod)
 
 

@@ -8,13 +8,14 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   val arraySize = config.ARRAY_SIZE
   val dataWidth = config.DATA_WIDTH
   val weightWidth = config.WEIGHT_WIDTH
-  val resWidth = config.RESULT_WIDTH
+  val mulResWidth = config.MUL_RES_WIDTH
+  val modResWidth = config.MOD_RES_WIDTH
   val modWidth = config.MOD_WIDTH
 
   val io = new Bundle {
     val dataIn = slave Flow (Fragment(Vec.fill(arraySize)(UInt(dataWidth bits)))) // 数据控制信号沿着data方向传递
     val weightIn = in(Vec.fill(arraySize)(UInt(weightWidth bits)))
-    val resOut = master Flow (Fragment(Vec.fill(arraySize)(UInt(resWidth bits))))
+    val resOut = master Flow (Fragment(Vec.fill(arraySize)(UInt(modResWidth bits))))
     val modIn = slave Stream (UInt(modWidth bits))
   }
 
@@ -22,8 +23,8 @@ class SystolicArray(implicit config: TPUConfig) extends Component {
   // 生成PE阵列
   val peArray = Array.fill(arraySize)(Array.fill(arraySize)(new PE()))
 
-  val resTemp = Array.fill(arraySize)(Array.fill(arraySize)(UInt(resWidth bits)))
-  val resData = Array.fill(arraySize)(UInt(resWidth bits))
+  val resTemp = Array.fill(arraySize)(Array.fill(arraySize)(UInt(mulResWidth bits)))
+  val resData = Array.fill(arraySize)(UInt(mulResWidth bits))
   val resLast = peArray.last.last.io.mulres.valid
   val resValid = {
     if (config.SKEW_OUTPUT) {

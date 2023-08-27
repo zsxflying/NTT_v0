@@ -4,12 +4,11 @@ import spinal.lib._
 
 class ModUnit(implicit config: TPUConfig) extends Component {
   val arraySize = config.ARRAY_SIZE
-  val resWidth = config.RESULT_WIDTH
   val modWidth = config.MOD_WIDTH
 
   val io = new Bundle {
-    val resIn = slave Flow (Vec.fill(arraySize)(UInt(resWidth bits)))
-    val resOut = master Flow (Vec.fill(arraySize)(UInt(resWidth bits)))
+    val resIn = slave Flow (Vec.fill(arraySize)(UInt(config.MUL_RES_WIDTH bits)))
+    val resOut = master Flow (Vec.fill(arraySize)(UInt(config.MOD_RES_WIDTH bits)))
     val modIn = slave Stream (UInt(modWidth bits))
   }
 
@@ -28,7 +27,8 @@ class ModUnit(implicit config: TPUConfig) extends Component {
 
   io.modIn.ready := validCond ? True | False // 使用delay之前的valid信号
 
-  val shiftReg = History(io.modIn.payload.resize(resWidth), config.ARRAY_SIZE)
+  //  val shiftReg = History(io.modIn.payload.resize(config.MUL_RES_WIDTH), config.ARRAY_SIZE)
+  val shiftReg = History(io.modIn.payload, config.ARRAY_SIZE)
   io.resOut.payload.zipWithIndex.foreach { case (l, r) => l := resInReg.payload(r) % shiftReg(r) }
   io.resOut.valid := resInReg.valid
 }

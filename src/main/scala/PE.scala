@@ -31,7 +31,7 @@ class PEIO(implicit config:TPUConfig) extends Bundle {
   // TODO: 添加有效信号是否可以降低功耗？ --待验证
   val din = slave (PEData())
   val dout = master (PEData())
-  val mulres = master Flow(UInt(config.RESULT_WIDTH bits))
+  val mulres = master Flow(UInt(config.MUL_RES_WIDTH bits))
 }
 
 
@@ -46,12 +46,9 @@ class PE(implicit config:TPUConfig) extends Component {
 
   val multiplyRes = dinPayloadReg.data * dinPayloadReg.weight
 
-  val resAccWidth = config.DATA_WIDTH + config.WEIGHT_WIDTH + log2Up(config.ARRAY_SIZE)
-  val resAccReg = Accumulator(multiplyRes.resize(resAccWidth bits), dinCtrlReg.valid, dinCtrlReg.lastOrFlush)
-  val resAccRegValue0 = resAccReg.value(resAccWidth - 1 downto config.RESULT_WIDTH)
-  val MAX_VALUE = U((BigInt(1) << config.RESULT_WIDTH) - 1, config.RESULT_WIDTH bits) // 输出结果的最大值
+  val resAccReg = Accumulator(multiplyRes.resize(config.MUL_RES_WIDTH bits), dinCtrlReg.valid, dinCtrlReg.lastOrFlush)
 
-  io.mulres.payload := Mux(resAccRegValue0 =/= U(0), MAX_VALUE, resAccReg.value.resized)// 输出数据被压缩到指定范围
+  io.mulres.payload := resAccReg.value
   io.mulres.valid := resAccReg.validOut
 }
 
