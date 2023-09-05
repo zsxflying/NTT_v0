@@ -11,6 +11,10 @@ class SysTop(
   val io = new Bundle {
     val start = in Bool()
     val done = out Bool()
+    // 下面的信号用来防止综合时ram被优化
+    val dout = out UInt(config.MOD_RES_WIDTH * config.ARRAY_SIZE bits)
+    val addr = out UInt(32 bits)
+    val valid = out Bool()
   }
 
   private val arraySize = config.ARRAY_SIZE
@@ -183,6 +187,10 @@ class SysTop(
       }
     }
   }
+
+  io.valid := resRam.io.valid
+  io.addr := resRam.io.addr.resized
+  io.dout := resRam.io.wdata.asBits.asUInt
 
 }
 
