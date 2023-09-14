@@ -121,3 +121,6 @@ INFO: Schema "PUBLIC" is up to date. No migration necessary.
 2023.09.01 16:55:25 WARN  Build server is not auto-connectable.
 Sep 01, 2023 4:55:25 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
 INFO: Unsupported notification method: $/setTrace
+2023.09.05 12:21:16 INFO  Shutting down server
+2023.09.05 12:21:16 INFO  shutting down Metals
+2023.09.05 12:21:16 INFO  Exiting server

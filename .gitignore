@@ -2,3 +2,4 @@ dump/*
 gen/*
 simWorkspace/*
 tmp/*
+target/*
